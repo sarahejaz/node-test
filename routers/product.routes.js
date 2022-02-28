@@ -1,20 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const productController = require('../controllers/product.controller');
 
-router.post('/add', (req, res) => {
-  res.send({ message: 'Product created' });
-});
+router.post('/add', productController.create);
 
-router.get('/:id', (req, res) => {
-  res.send({ message: 'Product details' });
-});
+router.get('/:id', productController.findOne);
 
-router.post('/edit/:id', (req, res) => {
-  res.send({ message: 'Product updated' });
-});
+router.get('/all', productController.findAll);
 
-router.delete('/delete/:id', (req, res) => {
-  res.send({ message: 'Product deleted' });
-});
+router.post('/edit/:id', productController.update);
+
+router.delete('/delete/:id', productController.delete);
 
 module.exports = router;

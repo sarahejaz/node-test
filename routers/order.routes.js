@@ -1,20 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const orderController = require('../controllers/order.controller');
 
-router.post('/add', (req, res) => {
-  res.send({ message: 'Order created' });
-});
+router.post('/add', orderController.create);
 
-router.get('/:id', (req, res) => {
-  res.send({ message: 'Order details' });
-});
+router.get('/:id', orderController.findOne);
 
-router.post('/edit/:id', (req, res) => {
-  res.send({ message: 'Order updated' });
-});
+router.post('/edit/:id', orderController.update);
 
-router.delete('/delete/:id', (req, res) => {
-  res.send({ message: 'Order deleted' });
-});
+router.delete('/delete/:id', orderController.delete);
 
 module.exports = router;
