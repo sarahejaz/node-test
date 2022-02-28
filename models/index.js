@@ -14,13 +14,21 @@ db.users = require('./user.model.js')(sequelize, Sequelize);
 db.products = require('./product.model.js')(sequelize, Sequelize);
 db.orders = require('./order.model.js')(sequelize, Sequelize);
 
-db.users.hasMany(db.orders, { as: 'orders' });
+db.users.hasMany(db.orders, {
+  as: 'orders',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 db.orders.belongsTo(db.users, {
   foreignKey: 'userId',
   as: 'user',
 });
 
-db.orders.hasMany(db.products, { as: 'products' });
+db.orders.hasMany(db.products, {
+  as: 'products',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 db.products.belongsTo(db.orders, {
   foreignKey: 'orderId',
   as: 'order',
