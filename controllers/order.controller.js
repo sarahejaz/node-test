@@ -216,7 +216,7 @@ exports.update = (req, res) => {
         });
       });
 
-    removeOrderFromUser(oldUserId, id);
+    // removeOrderFromUser(oldUserId, id);
   }
 
   const products = req.body.products;
@@ -279,5 +279,5 @@ exports.delete = (req, res) => {
       });
     });
 
-  removeOrderFromUser(userId, id);
+  // removeOrderFromUser(userId, id);
 };
