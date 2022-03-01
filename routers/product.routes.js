@@ -4,9 +4,9 @@ const productController = require('../controllers/product.controller');
 
 router.post('/add', productController.create);
 
-router.get('/:id', productController.findOne);
-
 router.get('/all', productController.findAll);
+
+router.get('/:id', productController.findOne);
 
 router.post('/edit/:id', productController.update);
 
