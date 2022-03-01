@@ -113,8 +113,6 @@ exports.update = async (req, res) => {
   //       });
   //     });
 
-  let differentUser = false;
-  let oldUserId;
   // await Order.findByPk(id)
   //   .then((olddata) => {
   //     if (olddata.userId != req.body.userId) {
@@ -147,35 +145,6 @@ exports.update = async (req, res) => {
         message: 'Error while updating Order with id=' + id,
       });
     });
-
-  if (differentUser) {
-    User.findByPk(req.body.userId)
-      .then((userdata) => {
-        if (userdata) {
-          // add orderid
-          if ('orders' in userdata) {
-            let orders = userdata.orders;
-            orders.push(createdOrder.id);
-            userdata.orders = orders;
-          } else {
-            userdata.orders = [];
-            userdata.orders.push(createdOrder.id);
-          }
-          userdata.save();
-        } else {
-          res.status(404).send({
-            message: `User with id=${req.body.userId} cannot be found`,
-          });
-        }
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: 'Error retrieving User with id=' + req.body.userId,
-        });
-      });
-
-    // removeOrderFromUser(oldUserId, id);
-  }
 
   const products = req.body.products;
   products.map((pId) => {
@@ -239,6 +208,4 @@ exports.delete = (req, res) => {
         message: 'Error deleting Order with id=' + id,
       });
     });
-
-  // removeOrderFromUser(userId, id);
 };
