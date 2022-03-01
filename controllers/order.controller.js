@@ -239,13 +239,13 @@ exports.update = async (req, res) => {
             message: 'Product orderId updated successfully',
           });
         } else {
-          res.send({
+          return res.send({
             message: 'Cannot update orderId of Product with id=' + p.id,
           });
         }
       })
       .catch((err) => {
-        res.status(500).send({
+        return res.status(500).send({
           message:
             'Error while updating orderId of Product with product id=' + p.id,
         });
