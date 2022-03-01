@@ -103,6 +103,8 @@ exports.update = async (req, res) => {
     .then((result) => {
       if (result == 1) {
         console.log('Order with id=' + id + 'updated successfully');
+      } else if (result == 0) {
+        console.log('Order with id=' + ' has no new data to be updated');
       } else {
         return res.status(500).send({
           message: 'Cannot update Order with id=' + id,
