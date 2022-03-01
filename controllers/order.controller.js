@@ -133,7 +133,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const id = req.params.id;
   const updateOrder = {
     date: req.body.date,
@@ -162,18 +162,36 @@ exports.update = (req, res) => {
 
   let differentUser = false;
   let oldUserId;
-  Order.findByPk(id)
-    .then((olddata) => {
-      if (olddata.userId != req.body.userId) {
-        // add Order to User
-        differentUser = true;
-        oldUserId = olddata.userId;
+  // await Order.findByPk(id)
+  //   .then((olddata) => {
+  //     if (olddata.userId != req.body.userId) {
+  //       // add Order to User
+  //       differentUser = true;
+  //       oldUserId = olddata.userId;
+  //     }
+  //     Order.update(updateOrder);
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).send({
+  //       message: 'Error updating Order with id=' + id,
+  //     });
+  //   });
+
+  await Order.update(updateOrder, {
+    where: { id: id },
+  })
+    .then((result) => {
+      if (result == 1) {
+        console.log('Order updated successfully');
+      } else {
+        return res.status(500).send({
+          message: 'Cannot update Order with id=' + id,
+        });
       }
-      Order.update(updateOrder);
     })
     .catch((err) => {
-      res.status(500).send({
-        message: 'Error updating Order with id=' + id,
+      return res.status(500).send({
+        message: 'Error while updating Order with id=' + id,
       });
     });
 
