@@ -1,23 +1,22 @@
-const { user } = require('pg/lib/defaults');
 const db = require('../models');
 const Order = db.orders;
 const Product = db.products;
 const User = db.User;
 
-function removeOrderFromUser(oldUserId, orderid) {
-  User.findByPk(oldUserId).then((userdata) => {
-    if (userdata) {
-      if ('orders' in userdata) {
-        userdata.orders.filter((o) => o.id != orderid);
-      }
-      userdata.save();
-    } else {
-      res.status(404).send({
-        message: `User with id=${req.body.userId} cannot be found`,
-      });
-    }
-  });
-}
+// function removeOrderFromUser(oldUserId, orderid) {
+//   User.findByPk(oldUserId).then((userdata) => {
+//     if (userdata) {
+//       if ('orders' in userdata) {
+//         userdata.orders.filter((o) => o.id != orderid);
+//       }
+//       userdata.save();
+//     } else {
+//       res.status(404).send({
+//         message: `User with id=${req.body.userId} cannot be found`,
+//       });
+//     }
+//   });
+// }
 
 exports.create = (req, res) => {
   if (!req.body) {
@@ -43,8 +42,11 @@ exports.create = (req, res) => {
     });
 
   const products = req.body.products;
-  products.map((p) => {
-    p.orderId = createdOrder.id;
+  products.map((pId) => {
+    const p = {
+      id: pId,
+      orderId: createdOrder.id,
+    };
     Product.update(p, {
       where: { id: p.id },
     })
@@ -55,14 +57,14 @@ exports.create = (req, res) => {
           });
         } else {
           res.send({
-            message: 'Cannot update orderId of Product with id=' + id,
+            message: 'Cannot update orderId of Product with id=' + p.id,
           });
         }
       })
       .catch((err) => {
         res.status(500).send({
           message:
-            'Error while updating orderId of Product with product id=' + id,
+            'Error while updating orderId of Product with product id=' + p.id,
         });
       });
   });
@@ -220,8 +222,11 @@ exports.update = (req, res) => {
   }
 
   const products = req.body.products;
-  products.map((p) => {
-    p.orderId = id;
+  products.map((pId) => {
+    const p = {
+      id: pId,
+      orderId: createdOrder.id,
+    };
     Product.update(p, {
       where: { id: p.id },
     })
@@ -232,14 +237,14 @@ exports.update = (req, res) => {
           });
         } else {
           res.send({
-            message: 'Cannot update orderId of Product with id=' + id,
+            message: 'Cannot update orderId of Product with id=' + p.id,
           });
         }
       })
       .catch((err) => {
         res.status(500).send({
           message:
-            'Error while updating orderId of Product with product id=' + id,
+            'Error while updating orderId of Product with product id=' + p.id,
         });
       });
   });
