@@ -26,7 +26,7 @@ db.orders.belongsTo(db.users, {
 
 db.orders.hasMany(db.products, {
   as: 'products',
-  onDelete: 'CASCADE',
+  onDelete: 'SET NULL',
   onUpdate: 'CASCADE',
 });
 db.products.belongsTo(db.orders, {
