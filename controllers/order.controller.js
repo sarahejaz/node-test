@@ -18,6 +18,7 @@ exports.create = async (req, res) => {
   await Order.create(order)
     .then((orderdata) => {
       createdOrder.id = orderdata.id;
+      console.log('Order with id=' + orderdata.id + ' created');
       //res.send(orderdata);
     })
     .catch((err) => {
@@ -27,7 +28,7 @@ exports.create = async (req, res) => {
     });
 
   const products = req.body.products;
-  products.map((pId) => {
+  await products.map((pId) => {
     const p = {
       id: pId,
       orderId: createdOrder.id,
@@ -37,21 +38,24 @@ exports.create = async (req, res) => {
     })
       .then((result) => {
         if (result == 1) {
-          res.send({
-            message: 'Product orderId updated successfully',
-          });
+          console.log(
+            'Product with id=' + p.id + 'orderId updated successfully'
+          );
         } else {
-          return res.send({
-            message: 'Cannot update orderId of Product with id=' + p.id,
-          });
+          console.log('Cannot update orderId of Product with id=' + p.id);
+          return;
         }
       })
       .catch((err) => {
         return res.status(500).send({
           message:
-            'Error while updating orderId of Product with product id=' + p.id,
+            'Error while updating orderId of Products\nError: ' + err.message,
         });
       });
+  });
+
+  res.status(201).send({
+    message: 'Order created and orderId of Products updated',
   });
 };
 
@@ -93,47 +97,12 @@ exports.update = async (req, res) => {
     userId: req.body.userId,
   };
 
-  //   Order.update(updateOrder, {
-  //     where: { id: id },
-  //   })
-  //     .then((result) => {
-  //       if (result == 1) {
-  //         res.send({
-  //           message: 'Order was updated successfully',
-  //         });
-  //       } else {
-  //         res.send({
-  //           message: 'Cannot update Order with id=' + id,
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       res.status(500).send({
-  //         message: 'Error updating Order with id=' + id,
-  //       });
-  //     });
-
-  // await Order.findByPk(id)
-  //   .then((olddata) => {
-  //     if (olddata.userId != req.body.userId) {
-  //       // add Order to User
-  //       differentUser = true;
-  //       oldUserId = olddata.userId;
-  //     }
-  //     Order.update(updateOrder);
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).send({
-  //       message: 'Error updating Order with id=' + id,
-  //     });
-  //   });
-
   await Order.update(updateOrder, {
     where: { id: id },
   })
     .then((result) => {
       if (result == 1) {
-        console.log('Order updated successfully');
+        console.log('Order with id=' + id + 'updated successfully');
       } else {
         return res.status(500).send({
           message: 'Cannot update Order with id=' + id,
