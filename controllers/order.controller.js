@@ -3,22 +3,7 @@ const Order = db.orders;
 const Product = db.products;
 const User = db.users;
 
-// function removeOrderFromUser(oldUserId, orderid) {
-//   User.findByPk(oldUserId).then((userdata) => {
-//     if (userdata) {
-//       if ('orders' in userdata) {
-//         userdata.orders.filter((o) => o.id != orderid);
-//       }
-//       userdata.save();
-//     } else {
-//       res.status(404).send({
-//         message: `User with id=${req.body.userId} cannot be found`,
-//       });
-//     }
-//   });
-// }
-
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   if (!req.body) {
     res.status(400).send({ message: 'Empty content' });
   }
@@ -30,7 +15,7 @@ exports.create = (req, res) => {
 
   let createdOrder = { ...order };
 
-  Order.create(order)
+  await Order.create(order)
     .then((orderdata) => {
       createdOrder.id = orderdata.id;
       res.send(orderdata);
