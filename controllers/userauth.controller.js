@@ -6,9 +6,20 @@ exports.signup = (req, res) => {
   User.create({
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 10),
-  }).catch((err) => {
-    res.status(500).send({ message: err.message });
-  });
+  })
+    .then((userdata) => {
+      if (userdata) {
+        return res.status(201).send({
+          message: 'User created',
+        });
+      }
+      return res.status(500).send({
+        message: 'Error occurred while creating user',
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
 };
 
 exports.signin = (req, res) => {
