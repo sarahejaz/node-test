@@ -116,31 +116,33 @@ exports.update = async (req, res) => {
     });
 
   const products = req.body.products;
-  await products.map((pId) => {
-    const p = {
-      id: pId,
-      orderId: createdOrder.id,
-    };
-    Product.update(p, {
-      where: { id: p.id },
-    })
-      .then((result) => {
-        if (result == 1) {
-          console.log(
-            'Product with id=' + p.id + 'orderId updated successfully'
-          );
-        } else {
-          console.log('Cannot update orderId of Product with id=' + p.id);
-          return;
-        }
+  if (products) {
+    await products.map((pId) => {
+      const p = {
+        id: pId,
+        orderId: id,
+      };
+      Product.update(p, {
+        where: { id: p.id },
       })
-      .catch((err) => {
-        return res.status(500).send({
-          message:
-            'Error while updating orderId of Products\nError: ' + err.message,
+        .then((result) => {
+          if (result == 1) {
+            console.log(
+              'Product with id=' + p.id + ' and orderId updated successfully'
+            );
+          } else {
+            console.log('Cannot update orderId of Product with id=' + p.id);
+            return;
+          }
+        })
+        .catch((err) => {
+          console.log(
+            'Error while updating orderId of Products\nError: ' + err.message
+          );
+          return;
         });
-      });
-  });
+    });
+  }
 
   res.status(200).send({
     message: 'Order updated and orderId of Products updated',
