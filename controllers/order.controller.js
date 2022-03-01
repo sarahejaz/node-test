@@ -53,53 +53,6 @@ exports.create = async (req, res) => {
         });
       });
   });
-
-  //   products.map((p) => {
-  //     p.orderId = createdOrder.id;
-  //     Order.findByPk(id)
-  //       .then((orderdata) => {
-  //         if (orderdata) {
-  //           res.send(orderdata);
-  //         } else {
-  //           res.status(404).send({
-  //             message: `Order with id=${id} cannot be found`,
-  //           });
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         res.status(500).send({
-  //           message: 'Error retrieving Order with id=' + id,
-  //         });
-  //       });
-  //     Product.findByPk(id).then((proddata) => {
-  //       if (proddata) {
-  //       }
-  //     });
-  //   });
-
-  User.findByPk(req.body.userId)
-    .then((userdata) => {
-      if (userdata) {
-        // add orderid
-        if ('orders' in userdata) {
-          let orders = userdata.orders;
-          orders.push(createdOrder.id);
-        } else {
-          userdata.orders = [];
-          userdata.orders.push(createdOrder.id);
-        }
-        userdata.save();
-      } else {
-        res.status(404).send({
-          message: `User with id=${req.body.userId} cannot be found`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: 'Error retrieving User with id=' + req.body.userId,
-      });
-    });
 };
 
 exports.findAll = (req, res) => {
