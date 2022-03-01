@@ -5,7 +5,7 @@ const User = db.users;
 
 exports.create = async (req, res) => {
   if (!req.body) {
-    res.status(400).send({ message: 'Empty content' });
+    return res.status(400).send({ message: 'Empty content' });
   }
 
   const order = {
@@ -18,10 +18,10 @@ exports.create = async (req, res) => {
   await Order.create(order)
     .then((orderdata) => {
       createdOrder.id = orderdata.id;
-      res.send(orderdata);
+      //res.send(orderdata);
     })
     .catch((err) => {
-      res.status(500).send({
+      return res.status(500).send({
         message: err.message || 'Error occurred while creating order',
       });
     });
@@ -41,13 +41,13 @@ exports.create = async (req, res) => {
             message: 'Product orderId updated successfully',
           });
         } else {
-          res.send({
+          return res.send({
             message: 'Cannot update orderId of Product with id=' + p.id,
           });
         }
       })
       .catch((err) => {
-        res.status(500).send({
+        return res.status(500).send({
           message:
             'Error while updating orderId of Product with product id=' + p.id,
         });
