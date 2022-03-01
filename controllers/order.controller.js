@@ -1,7 +1,7 @@
 const db = require('../models');
 const Order = db.orders;
 const Product = db.products;
-const User = db.User;
+const User = db.users;
 
 // function removeOrderFromUser(oldUserId, orderid) {
 //   User.findByPk(oldUserId).then((userdata) => {
