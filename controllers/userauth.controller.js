@@ -1,6 +1,8 @@
 const db = require('../models');
 const User = db.users;
 const bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+const config = require('../config/auth.config');
 
 exports.signup = (req, res) => {
   User.create({
@@ -40,7 +42,17 @@ exports.signin = (req, res) => {
         });
       }
 
-      res.status(200).send({ message: 'User signed in', email: user.email });
+      var token = jwt.sign({ id: user.id }, config.secret, {
+        expiresIn: 86400, // 24 hours
+      });
+
+      res
+        .status(200)
+        .send({
+          message: 'User signed in',
+          email: user.email,
+          accessToken: token,
+        });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
